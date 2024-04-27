@@ -46,6 +46,7 @@ module.exports.getAccessToken = async (event) => {
       if (error) {
         return reject(error);
       }
+      console.log("Generated Access Token:", response);
       return resolve(response);
     });
   })
