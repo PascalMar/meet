@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const CitySearch = ({ allLocations, setCurrentCity }) => {
 
@@ -6,10 +6,25 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
         setSuggestions(allLocations);
     }, [`${allLocations}`]);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (inputRef.current && !inputRef.current.contains(event.target)) {
+                setShowSuggestions(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
 
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
+    const inputRef = useRef(null);
 
     const handleInputChanged = (event) => {
         const value = event.target.value;
@@ -37,6 +52,7 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
                 value={query}
                 onFocus={() => setShowSuggestions(true)}
                 onChange={handleInputChanged}
+                ref={inputRef}
             />
             {showSuggestions ?
                 <ul className="suggestions">
@@ -47,6 +63,7 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
                         <b>See all cities</b>
                     </li>
                 </ul>
+                
                 : null
             }
         </div>
