@@ -23,25 +23,22 @@ const checkToken = async (accessToken) => {
 };
 
 export const getEvents = async () => {
-  if (window.location.href.startsWith("http://localhost")) {
+  if (window.location.href.startsWith('http://localhost')) {
     return mockData;
   }
 
   if (!navigator.onLine) {
     const events = localStorage.getItem("lastEvents");
-    NProgress.done();
     return events ? JSON.parse(events) : [];
   }
-
   const token = await getAccessToken();
 
   if (token) {
     removeQuery();
-    const url = "https://dyj2zbrb05.execute-api.eu-central-1.amazonaws.com/dev/api/get-events" + "/" + token;
+    const url = 'https://dyj2zbrb05.execute-api.eu-central-1.amazonaws.com/dev/api/get-events' + '/' + token;
     const response = await fetch(url);
     const result = await response.json();
     if (result) {
-      NProgress.done();
       localStorage.setItem("lastEvents", JSON.stringify(result.events));
       return result.events;
     } else return null;
