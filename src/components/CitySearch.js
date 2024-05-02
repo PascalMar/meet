@@ -10,7 +10,7 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
 
     useEffect(() => {
         setSuggestions(allLocations);
-    }, [`${allLocations}`]);
+    }, [allLocations]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -34,6 +34,9 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
             return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
         }) : [];
 
+        setQuery(value);
+        setSuggestions(filteredLocations);
+
         let infoText;
         if (filteredLocations.length === 0) {
             infoText = "We can not find the city you are looking for. Please try another city"
@@ -46,7 +49,7 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
     const handleItemClicked = (event) => {
         const value = event.target.textContent;
         setQuery(value);
-        setShowSuggestions(false); 
+        setShowSuggestions(false);
         setCurrentCity(value);
         setInfoAlert("")
     };
