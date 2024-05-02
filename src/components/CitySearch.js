@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
-const CitySearch = ({ allLocations, setCurrentCity }) => {
+const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
+
+
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [query, setQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         setSuggestions(allLocations);
@@ -21,10 +27,6 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
     }, []);
 
 
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const [query, setQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
-    const inputRef = useRef(null);
 
     const handleInputChanged = (event) => {
         const value = event.target.value;
@@ -32,15 +34,21 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
             return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
         }) : [];
 
-        setQuery(value);
-        setSuggestions(filteredLocations);
+        let infoText;
+        if (filteredLocations.length === 0) {
+            infoText = "We can not find the city you are looking for. Please try another city"
+        } else {
+            infoText = ""
+        }
+        setInfoAlert(infoText);
     };
 
     const handleItemClicked = (event) => {
         const value = event.target.textContent;
         setQuery(value);
-        setShowSuggestions(false); // to hide the list
+        setShowSuggestions(false); 
         setCurrentCity(value);
+        setInfoAlert("")
     };
 
     return (
@@ -63,7 +71,7 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
                         <b>See all cities</b>
                     </li>
                 </ul>
-                
+
                 : null
             }
         </div>
