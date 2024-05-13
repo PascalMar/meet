@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import ListGroup from 'react-bootstrap/ListGroup';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+
 
 const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -53,27 +57,44 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
     };
 
     return (
-        <div id="city-search">
-            <input
-                type="text"
-                className="city"
-                placeholder="Search for a city"
-                value={query}
-                onFocus={() => setShowSuggestions(true)}
-                onChange={handleInputChanged}
-                ref={inputRef}
-            />
-            {showSuggestions ?
-                <ul className="suggestions">
-                    {suggestions.map((suggestion) => {
-                        return <li onClick={handleItemClicked} key={suggestion}>{suggestion}</li>
-                    })}
-                    <li key='See all cities' onClick={handleItemClicked}>
-                        <b>See all cities</b>
-                    </li>
-                </ul>
+        <div id='city-search' className="position-relative">
+            <InputGroup className=" px-0 mb-3">
+                <Form.Control
+                    className="border-primary city"
+                    placeholder="Search for a city"
+                    value={query}
+                    onFocus={() => setShowSuggestions(true)}
+                    onChange={handleInputChanged}
+                    role='textbox'
+                    ref={inputRef}
+                />
+            </InputGroup>
 
-                : null
+            {showSuggestions &&
+                <ListGroup className="suggestions" role='list'>
+                    {suggestions.map((suggestion) => {
+                        return (
+                            <ListGroup.Item
+                                className=" px-0"
+                                action
+                                onClick={handleItemClicked}
+                                key={suggestion}
+                                role='listitem'
+                            >
+                                {suggestion}
+                            </ListGroup.Item>
+                        );
+                    })}
+                    <ListGroup.Item
+                        className=" px-0"
+                        action
+                        key='See all cities'
+                        onClick={handleItemClicked}
+                        role='listitem'
+                    >
+                        <b>See all cities</b>
+                    </ListGroup.Item>
+                </ListGroup>
             }
         </div>
     )
